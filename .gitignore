@@ -11,3 +11,6 @@ node_modules/
 .vscode/
 *.iml
 .DS_Store
+
+# Senhas locais do Docker
+.env
