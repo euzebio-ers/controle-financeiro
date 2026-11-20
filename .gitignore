@@ -1,0 +1,13 @@
+# Back-end (Spring Boot)
+application.properties
+target/
+*.class
+
+# Front-end
+node_modules/
+
+# IDEs e sistema
+.idea/
+.vscode/
+*.iml
+.DS_Store
