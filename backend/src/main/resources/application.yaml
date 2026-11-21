@@ -1,0 +1,12 @@
+spring:
+  config:
+    import: optional:file:../database/.env[.properties]
+  application:
+    name: backend
+  datasource:
+    url: jdbc:mysql://localhost:3306/controle_financeiro
+    username: root
+    password: ${DB_ROOT_PASSWORD}
+  jpa:
+    hibernate:
+      ddl-auto: validate
