@@ -21,4 +21,8 @@ public class CategoriaRequest {
 
     @NotNull(message = "O tipo não pode ser nulo")
     private TipoCategoria tipo;
+
+    public void setNome(String nome) {
+        this.nome = nome == null ? null : nome.trim();
+    }
 }

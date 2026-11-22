@@ -29,4 +29,8 @@ public class ContaRequest {
     @NotNull(message = "O saldo inicial não pode ter valor null")
     @Digits(integer = 10, fraction = 2, message = "O valor deve ter no máximo 10 dígitos inteiros e 2 casas decimais")
     private BigDecimal saldoInicial = BigDecimal.ZERO;
+
+    public void setNome(String nome) {
+        this.nome = nome == null ? null : nome.trim();
+    }
 }

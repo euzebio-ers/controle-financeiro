@@ -35,4 +35,8 @@ public class TransacaoRequest {
 
     @NotNull(message = "categoriaId não pode ser nulo")
     private Long categoriaId;
+
+    public void setDescricao(String descricao) {
+        this.descricao = descricao == null ? null : descricao.trim();
+    }
 }
