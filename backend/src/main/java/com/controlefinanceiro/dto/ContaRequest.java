@@ -2,6 +2,7 @@ package com.controlefinanceiro.dto;
 
 import com.controlefinanceiro.enums.TipoCategoria;
 import com.controlefinanceiro.enums.TipoConta;
+import com.fasterxml.jackson.annotation.JsonCreator;
 import jakarta.validation.constraints.Digits;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
@@ -13,7 +14,7 @@ import java.math.BigDecimal;
 
 @Getter
 @Setter
-@NoArgsConstructor
+@NoArgsConstructor(onConstructor_ = @JsonCreator)
 @AllArgsConstructor
 @Builder
 public class ContaRequest {

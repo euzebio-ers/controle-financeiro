@@ -1,6 +1,7 @@
 package com.controlefinanceiro.dto;
 
 import com.controlefinanceiro.enums.TipoCategoria;
+import com.fasterxml.jackson.annotation.JsonCreator;
 import jakarta.validation.constraints.*;
 import lombok.*;
 
@@ -10,7 +11,7 @@ import java.time.LocalDate;
 
 @Getter
 @Setter
-@NoArgsConstructor
+@NoArgsConstructor(onConstructor_ = @JsonCreator)
 @AllArgsConstructor
 @Builder
 public class TransacaoRequest {
