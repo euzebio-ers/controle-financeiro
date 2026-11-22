@@ -7,6 +7,6 @@ public class ConflitoException extends RuntimeException {
     }
 
     public ConflitoException() {
-        super("Erro de conlito");
+        super("Erro de conflito");
     }
 }

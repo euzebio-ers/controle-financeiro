@@ -7,10 +7,9 @@ import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.RestControllerAdvice;
 import org.springframework.web.method.annotation.MethodArgumentTypeMismatchException;
-import org.springframework.web.servlet.mvc.method.annotation.ResponseEntityExceptionHandler;
 
 @RestControllerAdvice
-public class GlobalExceptionHandler extends ResponseEntityExceptionHandler {
+public class GlobalExceptionHandler {
 
     @ExceptionHandler(RecursoNaoEncontradoException.class)
     public ResponseEntity<ErroResponse> recursoNaoEncontradoHandler(RecursoNaoEncontradoException ex) {
@@ -38,6 +37,6 @@ public class GlobalExceptionHandler extends ResponseEntityExceptionHandler {
 
     @ExceptionHandler({HttpMessageNotReadableException.class, MethodArgumentTypeMismatchException.class})
     public ResponseEntity<ErroResponse> requisicaoInvalida(Exception ex) {
-        return ResponseEntity.status(HttpStatus.CONFLICT).body(new ErroResponse("Argumento inválido"));
+        return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(new ErroResponse("Argumento inválido"));
     }
 }
