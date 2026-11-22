@@ -15,24 +15,24 @@ import java.time.LocalDate;
 @Builder
 public class TransacaoRequest {
 
-    @NotBlank
-    @Size(max = 150)
+    @NotBlank(message = "Descrição não pode ser vazia")
+    @Size(max = 150, message = "A descrição não pode ter mais de 150 caracteres")
     private String descricao;
 
-    @NotNull
-    @DecimalMin(value = "0.01")
-    @Digits(integer = 10, fraction = 2)
+    @NotNull(message = "O valor não pode ser nulo")
+    @DecimalMin(value = "0.01", message = "O valor deve ser maior que 0")
+    @Digits(integer = 10, fraction = 2, message = "O valor deve ter no máximo 10 dígitos inteiros e 2 casas decimais")
     private BigDecimal valor;
 
-    @NotNull
+    @NotNull(message = "O vencimento não pode ser nulo")
     private LocalDate vencimento;
 
-    @NotNull
+    @NotNull(message = "O tipo não pode ser nulo")
     private TipoCategoria tipo;
 
-    @NotNull
+    @NotNull(message = "contaId não pode ser nulo")
     private Long contaId;
 
-    @NotNull
+    @NotNull(message = "categoriaId não pode ser nulo")
     private Long categoriaId;
 }

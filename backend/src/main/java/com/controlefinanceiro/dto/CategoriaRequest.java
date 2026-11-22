@@ -15,10 +15,10 @@ import lombok.*;
 @Builder
 public class CategoriaRequest {
 
-    @NotBlank
-    @Size(max = 100)
+    @NotBlank(message = "Nome não pode ser vazio")
+    @Size(max = 100, message = "O nome não pode ter mais de 100 caracteres")
     private String nome;
 
-    @NotNull
+    @NotNull(message = "O tipo não pode ser nulo")
     private TipoCategoria tipo;
 }
