@@ -4,6 +4,7 @@ import com.controlefinanceiro.enums.TipoCategoria;
 import jakarta.persistence.*;
 import lombok.*;
 
+import java.util.ArrayList;
 import java.util.List;
 
 @Entity
@@ -28,5 +29,5 @@ public class Categoria {
     private TipoCategoria tipo;
 
     @OneToMany(mappedBy = "categoria")
-    private List<Transacao> transacoes;
+    private List<Transacao> transacoes = new ArrayList<>();
 }

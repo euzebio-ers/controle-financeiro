@@ -5,6 +5,7 @@ import jakarta.persistence.*;
 import lombok.*;
 
 import java.math.BigDecimal;
+import java.util.ArrayList;
 import java.util.List;
 
 @Entity
@@ -32,5 +33,5 @@ public class Conta {
     private BigDecimal saldoInicial = BigDecimal.ZERO;
 
     @OneToMany(mappedBy = "conta")
-    private List<Transacao> transacoes;
+    private List<Transacao> transacoes = new ArrayList<>();
 }
