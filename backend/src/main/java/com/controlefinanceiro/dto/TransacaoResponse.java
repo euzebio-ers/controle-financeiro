@@ -1,6 +1,5 @@
 package com.controlefinanceiro.dto;
 
-import com.controlefinanceiro.enums.StatusTransacao;
 import com.controlefinanceiro.enums.StatusTransacaoResponse;
 import com.controlefinanceiro.enums.TipoCategoria;
 import lombok.*;

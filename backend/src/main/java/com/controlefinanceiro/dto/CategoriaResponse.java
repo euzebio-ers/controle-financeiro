@@ -1,7 +1,6 @@
 package com.controlefinanceiro.dto;
 
 import com.controlefinanceiro.enums.TipoCategoria;
-import com.controlefinanceiro.enums.TipoConta;
 import lombok.*;
 
 
