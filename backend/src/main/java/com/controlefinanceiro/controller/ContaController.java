@@ -2,7 +2,6 @@ package com.controlefinanceiro.controller;
 
 import com.controlefinanceiro.dto.ContaRequest;
 import com.controlefinanceiro.dto.ContaResponse;
-import com.controlefinanceiro.enums.TipoConta;
 import com.controlefinanceiro.service.ContaService;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;

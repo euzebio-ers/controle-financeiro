@@ -4,7 +4,6 @@ import com.controlefinanceiro.dto.TransacaoRequest;
 import com.controlefinanceiro.dto.TransacaoResponse;
 import com.controlefinanceiro.enums.StatusTransacao;
 import com.controlefinanceiro.enums.StatusTransacaoResponse;
-import com.controlefinanceiro.model.Conta;
 import com.controlefinanceiro.model.Transacao;
 import org.mapstruct.Mapper;
 import org.mapstruct.Mapping;

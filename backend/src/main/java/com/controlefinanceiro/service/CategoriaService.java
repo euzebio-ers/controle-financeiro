@@ -5,7 +5,6 @@ import com.controlefinanceiro.dto.CategoriaResponse;
 import com.controlefinanceiro.enums.TipoCategoria;
 import com.controlefinanceiro.exception.ConflitoException;
 import com.controlefinanceiro.exception.RecursoNaoEncontradoException;
-import com.controlefinanceiro.exception.RegraNegocioException;
 import com.controlefinanceiro.mapper.CategoriaMapper;
 import com.controlefinanceiro.model.Categoria;
 import com.controlefinanceiro.repository.CategoriaRepository;
@@ -54,10 +53,10 @@ public class CategoriaService {
     @Transactional
     public CategoriaResponse update(Long id, CategoriaRequest request) {
         Categoria categoria = repository.findById(id)
-                .orElseThrow(() -> new RecursoNaoEncontradoException("ID não existe"));
+                .orElseThrow(() -> new RecursoNaoEncontradoException("Categoria não existe"));
 
         if (repository.existsByNomeIgnoreCaseAndIdNot(request.getNome(), id)) {
-            throw new ConflitoException("Esse nome de categoria já existe");
+            throw new ConflitoException("Já existe uma categoria com esse nome");
         }
         if (categoria.getTipo() != request.getTipo() && !categoria.getTransacoes().isEmpty()) {
             throw new ConflitoException("Não é possível alterar o tipo de uma categoria que contenha transações");
@@ -72,7 +71,7 @@ public class CategoriaService {
     @Transactional
     public void deleteById(Long id) {
         Categoria categoria = repository.findById(id)
-                .orElseThrow(() -> new RecursoNaoEncontradoException("ID não existe"));
+                .orElseThrow(() -> new RecursoNaoEncontradoException("Categoria não existe"));
 
         if (!categoria.getTransacoes().isEmpty()) {
             throw new ConflitoException("Não é possível deletar uma categoria que contenha transações");

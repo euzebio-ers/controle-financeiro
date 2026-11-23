@@ -2,7 +2,6 @@ package com.controlefinanceiro.service;
 
 import com.controlefinanceiro.dto.ContaRequest;
 import com.controlefinanceiro.dto.ContaResponse;
-import com.controlefinanceiro.enums.TipoConta;
 import com.controlefinanceiro.exception.ConflitoException;
 import com.controlefinanceiro.exception.RecursoNaoEncontradoException;
 import com.controlefinanceiro.mapper.ContaMapper;
