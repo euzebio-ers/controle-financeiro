@@ -2,6 +2,7 @@ package com.controlefinanceiro.dto;
 
 import com.controlefinanceiro.enums.TipoCategoria;
 import com.controlefinanceiro.enums.TipoConta;
+import com.fasterxml.jackson.annotation.JsonCreator;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Size;
@@ -10,15 +11,19 @@ import lombok.*;
 
 @Getter
 @Setter
-@NoArgsConstructor
+@NoArgsConstructor(onConstructor_ = @JsonCreator)
 @AllArgsConstructor
 @Builder
 public class CategoriaRequest {
 
-    @NotBlank
-    @Size(max = 100)
+    @NotBlank(message = "Nome não pode ser vazio")
+    @Size(max = 100, message = "O nome não pode ter mais de 100 caracteres")
     private String nome;
 
-    @NotNull
+    @NotNull(message = "O tipo não pode ser nulo")
     private TipoCategoria tipo;
+
+    public void setNome(String nome) {
+        this.nome = nome == null ? null : nome.trim();
+    }
 }

@@ -1,4 +1,7 @@
 spring:
+  web:
+    error:
+      include-stacktrace: NEVER
   config:
     import: optional:file:../database/.env[.properties]
   application:
