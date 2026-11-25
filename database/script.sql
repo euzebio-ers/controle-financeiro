@@ -1,5 +1,6 @@
 -- Controle Financeiro - Script do banco (MySQL 8)
 -- Pode ser executado do zero: apaga e recria o banco.
+SET NAMES utf8mb4;
 
 DROP DATABASE IF EXISTS controle_financeiro;
 CREATE DATABASE controle_financeiro
