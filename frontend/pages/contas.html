@@ -1,0 +1,107 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Contas — Controle Financeiro</title>
+  <link rel="stylesheet" href="../css/global.css" />
+</head>
+<body>
+
+  <div class="layout">
+    <div id="menu-lateral"></div>
+
+    <main class="conteudo">
+      <h1 class="pagina-titulo">Contas</h1>
+
+      <div id="caixaMensagem" class="mensagem oculta"></div>
+
+      <div class="barra-ferramentas">
+        <div class="campo-busca">
+          <input type="text" id="campoBusca" placeholder="Buscar por nome..." />
+        </div>
+
+        <div class="barra-ferramentas__filtros">
+          <select id="filtroTipo">
+            <option value="">Todos os tipos</option>
+            <option value="CORRENTE">Conta corrente</option>
+            <option value="POUPANCA">Poupança</option>
+            <option value="CARTEIRA">Carteira</option>
+            <option value="CARTAO">Cartão</option>
+          </select>
+
+          <button class="btn btn-primario" id="botaoNovaConta">+ Nova conta</button>
+        </div>
+      </div>
+
+      <div class="tabela-wrapper">
+        <table class="tabela">
+          <thead>
+            <tr>
+              <th>Nome</th>
+              <th>Tipo</th>
+              <th>Saldo inicial</th>
+              <th>Saldo atual</th>
+              <th>Ações</th>
+            </tr>
+          </thead>
+          <tbody id="corpoTabela">
+            <!-- linhas inseridas via JS -->
+          </tbody>
+        </table>
+        <div id="estadoVazio" class="estado-vazio" style="display: none;">
+          Nenhuma conta encontrada.
+        </div>
+      </div>
+    </main>
+  </div>
+
+  <!-- MODAL: criar/editar conta -->
+  <div class="modal-fundo oculto" id="modalFundo">
+    <div class="modal">
+      <div class="modal__cabecalho">
+        <span class="modal__titulo" id="modalTitulo">Nova conta</span>
+        <button class="modal__fechar" id="botaoFecharModal">&times;</button>
+      </div>
+
+      <form id="formConta">
+        <input type="hidden" id="contaId" />
+
+        <div class="form-campo" id="campoNomeWrapper">
+          <label for="campoNome">Nome</label>
+          <input type="text" id="campoNome" required />
+          <div class="form-campo__erro" id="erroNome"></div>
+        </div>
+
+        <div class="form-campo" id="campoTipoWrapper">
+          <label for="campoTipo">Tipo</label>
+          <select id="campoTipo" required>
+            <option value="">Selecione...</option>
+            <option value="CORRENTE">Conta corrente</option>
+            <option value="POUPANCA">Poupança</option>
+            <option value="CARTEIRA">Carteira</option>
+            <option value="CARTAO">Cartão</option>
+          </select>
+          <div class="form-campo__erro" id="erroTipo"></div>
+        </div>
+
+        <div class="form-campo" id="campoSaldoWrapper">
+          <label for="campoSaldo">Saldo inicial</label>
+          <input type="number" id="campoSaldo" step="0.01" required />
+          <div class="form-campo__erro" id="erroSaldo"></div>
+        </div>
+
+        <div class="form-acoes">
+          <button type="button" class="btn btn-secundario" id="botaoCancelar">Cancelar</button>
+          <button type="submit" class="btn btn-primario">Salvar</button>
+        </div>
+      </form>
+    </div>
+  </div>
+
+  <script src="../js/api.js"></script>
+  <script src="../js/menu.js"></script>
+  <script src="../js/contas.js"></script>
+  <script>montarMenu("contas");</script>
+</body>
+</html>
