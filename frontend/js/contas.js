@@ -14,7 +14,6 @@
 const corpoTabela = document.getElementById("corpoTabela");
 const estadoVazio = document.getElementById("estadoVazio");
 const campoBusca = document.getElementById("campoBusca");
-const filtroTipo = document.getElementById("filtroTipo");
 const caixaMensagem = document.getElementById("caixaMensagem");
 
 const modalFundo = document.getElementById("modalFundo");
@@ -35,7 +34,6 @@ const ROTULOS_TIPO = {
   CORRENTE: "Conta corrente",
   POUPANCA: "Poupança",
   CARTEIRA: "Carteira",
-  CARTAO: "Cartão",
 };
 
 // ---------------------------------------------------------------
@@ -70,11 +68,9 @@ function mostrarMensagem(texto, tipo) {
 // ---------------------------------------------------------------
 async function carregarContas() {
   const busca = campoBusca.value.trim();
-  const tipo = filtroTipo.value;
 
   const parametros = new URLSearchParams();
   if (busca) parametros.set("busca", busca);
-  if (tipo) parametros.set("tipo", tipo);
 
   const query = parametros.toString() ? `?${parametros.toString()}` : "";
 
@@ -125,7 +121,6 @@ campoBusca.addEventListener("input", () => {
   temporizadorBusca = setTimeout(carregarContas, 400);
 });
 
-filtroTipo.addEventListener("change", carregarContas);
 
 // ---------------------------------------------------------------
 // MODAL: abrir / fechar

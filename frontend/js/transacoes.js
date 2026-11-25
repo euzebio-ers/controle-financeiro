@@ -146,9 +146,9 @@ function renderizarTabela(transacoes) {
       tipo === "RECEITA" ? "valor-positivo" : "valor-negativo";
 
     const classeStatus = {
-      PAGA: "status-paga",
-      PENDENTE: "status-pendente",
-      ATRASADA: "status-atrasada"
+      PAGA: "selo-paga",
+      PENDENTE: "selo-pendente",
+      ATRASADA: "selo-atrasada"
     }[status] || "";
 
     linha.innerHTML = `
