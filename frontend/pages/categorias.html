@@ -1,0 +1,95 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Categorias — Controle Financeiro</title>
+  <link rel="stylesheet" href="../css/global.css" />
+</head>
+<body>
+
+  <div class="layout">
+    <div id="menu-lateral"></div>
+
+    <main class="conteudo">
+      <h1 class="pagina-titulo">Categorias</h1>
+
+      <div id="caixaMensagem" class="mensagem oculta"></div>
+
+      <div class="barra-ferramentas">
+        <div class="campo-busca">
+          <input type="text" id="campoBusca" placeholder="Buscar por nome..." />
+        </div>
+
+        <div class="barra-ferramentas__filtros">
+          <select id="filtroTipo">
+            <option value="">Todos os tipos</option>
+            <option value="RECEITA">Receita</option>
+            <option value="DESPESA">Despesa</option>
+          </select>
+
+          <button class="btn btn-primario" id="botaoNovaCategoria">+ Nova categoria</button>
+        </div>
+      </div>
+
+      <div class="tabela-wrapper">
+        <table class="tabela">
+          <thead>
+            <tr>
+              <th>Nome</th>
+              <th>Tipo</th>
+              <th>Ações</th>
+            </tr>
+          </thead>
+          <tbody id="corpoTabela">
+            <!-- linhas inseridas via JS -->
+          </tbody>
+        </table>
+        <div id="estadoVazio" class="estado-vazio" style="display: none;">
+          Nenhuma categoria encontrada.
+        </div>
+      </div>
+    </main>
+  </div>
+
+  <!-- MODAL: criar/editar categoria -->
+  <div class="modal-fundo oculto" id="modalFundo">
+    <div class="modal">
+      <div class="modal__cabecalho">
+        <span class="modal__titulo" id="modalTitulo">Nova categoria</span>
+        <button class="modal__fechar" id="botaoFecharModal">&times;</button>
+      </div>
+
+      <form id="formCategoria">
+        <input type="hidden" id="categoriaId" />
+
+        <div class="form-campo" id="campoNomeWrapper">
+          <label for="campoNome">Nome</label>
+          <input type="text" id="campoNome" required />
+          <div class="form-campo__erro" id="erroNome"></div>
+        </div>
+
+        <div class="form-campo" id="campoTipoWrapper">
+          <label for="campoTipo">Tipo</label>
+          <select id="campoTipo" required>
+            <option value="">Selecione...</option>
+            <option value="RECEITA">Receita</option>
+            <option value="DESPESA">Despesa</option>
+          </select>
+          <div class="form-campo__erro" id="erroTipo"></div>
+        </div>
+
+        <div class="form-acoes">
+          <button type="button" class="btn btn-secundario" id="botaoCancelar">Cancelar</button>
+          <button type="submit" class="btn btn-primario">Salvar</button>
+        </div>
+      </form>
+    </div>
+  </div>
+
+  <script src="../js/api.js"></script>
+  <script src="../js/menu.js"></script>
+  <script src="../js/categorias.js"></script>
+  <script>montarMenu("categorias");</script>
+</body>
+</html>

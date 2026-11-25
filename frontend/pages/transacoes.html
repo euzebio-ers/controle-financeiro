@@ -1,0 +1,243 @@
+
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="description" content="Gerenciamento de transações financeiras">
+  <title>Transações | Controle Financeiro</title>
+  <link rel="stylesheet" href="../css/global.css">
+</head>
+<body>
+
+  <div class="layout">
+
+    <div id="menu-lateral"></div>
+
+    <main class="conteudo">
+
+      <h1 class="pagina-titulo">Transações</h1>
+
+      <div id="caixaMensagem" class="mensagem oculta"
+           role="alert" aria-live="polite"></div>
+
+      <!-- Busca e filtros -->
+      <section aria-label="Gerenciar transações">
+
+        <div class="barra-ferramentas">
+
+          <div class="campo-busca">
+            <input
+              type="search"
+              id="campoBusca"
+              placeholder="Buscar por descrição..."
+              autocomplete="off"
+            >
+          </div>
+
+          <div class="barra-ferramentas__filtros">
+
+            <select id="filtroTipo" aria-label="Filtrar por tipo">
+              <option value="">Todos os tipos</option>
+              <option value="RECEITA">Receitas</option>
+              <option value="DESPESA">Despesas</option>
+            </select>
+
+            <select id="filtroStatus" aria-label="Filtrar por status">
+              <option value="">Todos os status</option>
+              <option value="PENDENTE">Pendente</option>
+              <option value="PAGA">Paga</option>
+              <option value="ATRASADA">Atrasada</option>
+            </select>
+
+            <input
+              type="month"
+              id="filtroMes"
+              aria-label="Filtrar por mês"
+            >
+
+            <button
+              type="button"
+              class="btn btn-secundario"
+              id="botaoLimparFiltros"
+            >
+              Limpar filtros
+            </button>
+
+          </div>
+
+          <button
+            type="button"
+            class="btn btn-primario"
+            id="botaoNovaTransacao"
+          >
+            + Nova transação
+          </button>
+
+        </div>
+
+        <!-- Tabela -->
+        <div class="tabela-wrapper">
+
+          <table class="tabela">
+
+            <thead>
+              <tr>
+                <th>Descrição</th>
+                <th>Valor</th>
+                <th>Vencimento</th>
+                <th>Tipo</th>
+                <th>Conta</th>
+                <th>Categoria</th>
+                <th>Status</th>
+                <th>Ações</th>
+              </tr>
+            </thead>
+
+            <tbody id="corpoTabela">
+              <tr>
+                <td colspan="8">Carregando transações...</td>
+              </tr>
+            </tbody>
+
+          </table>
+
+          <div
+            id="estadoVazio"
+            class="estado-vazio"
+            style="display: none;"
+          >
+            Nenhuma transação encontrada.
+          </div>
+
+        </div>
+
+      </section>
+
+    </main>
+
+  </div>
+
+  <!-- Modal -->
+  <div
+    id="modalFundo"
+    class="modal-fundo oculto"
+    role="dialog"
+    aria-modal="true"
+    aria-labelledby="modalTitulo"
+  >
+
+    <div class="modal">
+
+      <div class="modal__cabecalho">
+
+        <h2 id="modalTitulo" class="modal__titulo">
+          Nova transação
+        </h2>
+
+        <button
+          type="button"
+          class="modal__fechar"
+          id="botaoFecharModal"
+          aria-label="Fechar modal"
+        >
+          ×
+        </button>
+
+      </div>
+
+      <form id="formTransacao" novalidate>
+
+        <input type="hidden" id="transacaoId">
+
+        <div class="form-campo" id="campoDescricaoWrapper">
+          <label for="campoDescricao">Descrição</label>
+          <input
+            type="text"
+            id="campoDescricao"
+            placeholder="Ex.: Pagamento de aluguel"
+            maxlength="150"
+          >
+          <small id="erroDescricao" class="form-campo__erro"></small>
+        </div>
+
+        <div class="form-campo" id="campoValorWrapper">
+          <label for="campoValor">Valor (R$)</label>
+          <input
+            type="number"
+            id="campoValor"
+            placeholder="0,00"
+            min="0.01"
+            step="0.01"
+          >
+          <small id="erroValor" class="form-campo__erro"></small>
+        </div>
+
+        <div class="form-campo" id="campoVencimentoWrapper">
+          <label for="campoVencimento">Data de vencimento</label>
+          <input type="date" id="campoVencimento">
+          <small id="erroVencimento" class="form-campo__erro"></small>
+        </div>
+
+        <div class="form-campo" id="campoTipoWrapper">
+          <label for="campoTipo">Tipo</label>
+          <select id="campoTipo">
+            <option value="">Selecione o tipo</option>
+            <option value="RECEITA">Receita</option>
+            <option value="DESPESA">Despesa</option>
+          </select>
+          <small id="erroTipo" class="form-campo__erro"></small>
+        </div>
+
+        <div class="form-campo" id="campoContaWrapper">
+          <label for="campoConta">Conta</label>
+          <select id="campoConta">
+            <option value="">Selecione uma conta</option>
+          </select>
+          <small id="erroConta" class="form-campo__erro"></small>
+        </div>
+
+        <div class="form-campo" id="campoCategoriaWrapper">
+          <label for="campoCategoria">Categoria</label>
+          <select id="campoCategoria">
+            <option value="">Selecione uma categoria</option>
+          </select>
+          <small id="erroCategoria" class="form-campo__erro"></small>
+        </div>
+
+        <div class="form-acoes">
+
+          <button
+            type="button"
+            class="btn btn-secundario"
+            id="botaoCancelar"
+          >
+            Cancelar
+          </button>
+
+          <button
+            type="submit"
+            class="btn btn-primario"
+          >
+            Salvar transação
+          </button>
+
+        </div>
+
+      </form>
+
+    </div>
+
+  </div>
+
+  <script src="../js/api.js"></script>
+  <script src="../js/menu.js"></script>
+
+  <script>
+    montarMenu("transacoes");
+  </script>
+
+  <script src="../js/transacoes.js"></script>
+
+</body>
+</html>
