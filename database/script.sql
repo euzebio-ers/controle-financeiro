@@ -72,7 +72,7 @@ SET @dia12 = LEAST(CAST(DATE_ADD(@inicio_mes, INTERVAL 11 DAY) AS DATE), CAST(@h
 SET @pm_dia05 = DATE_ADD(@proximo_mes, INTERVAL 4 DAY);
 
 INSERT INTO contas (nome, tipo, saldo_inicial) VALUES
-  ('Banco Master',         'CORRENTE', 1200.00),
+  ('Nubank',         'CORRENTE', 1200.00),
   ('Banco do Brasil', 'CORRENTE', 350.00),
   ('Poupança Itaú', 'POUPANCA', 2500.00),
   ('Carteira',       'CARTEIRA', 200.00);
