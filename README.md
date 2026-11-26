@@ -77,7 +77,7 @@ Na primeira vez o Docker baixa as imagens e compila o back-end, o que pode levar
 | Parar e apagar os dados do banco | `docker compose --env-file database/.env down -v` |
 | Recompilar depois de alterar o back-end | `docker compose --env-file database/.env up -d --build` |
 
-> Alterações no front-end aparecem direto (basta recarregar a página). Não rode este modo junto com o banco da pasta `database`, porque os dois usam a porta 3306.
+> Alterações no front-end aparecem direto (basta recarregar a página).
 
 ---
 
@@ -112,12 +112,11 @@ Essa mesma senha é lida automaticamente pelo back-end. O arquivo `.env` está n
 
 ### 3. Criar e subir o banco (terminal 1)
 
-Com o Docker Desktop aberto:
+Com o Docker Desktop aberto, na raiz do projeto, suba apenas o serviço do banco:
 
 ```bash
-cd database
-docker compose up -d
-docker compose logs -f mysql
+docker compose --env-file database/.env up -d db
+docker compose --env-file database/.env logs -f db
 ```
 
 Na primeira execução, o MySQL cria o banco `controle_financeiro`, as tabelas e os dados de exemplo a partir do `script.sql`. Aguarde aparecer a linha:
@@ -128,10 +127,10 @@ ready for connections ... port: 3306
 
 Depois aperte `Ctrl+C` para sair dos logs (o banco continua rodando).
 
-> **Atenção:** o `script.sql` só é executado quando o banco é criado pela primeira vez. Para recriar o banco do zero (por exemplo, depois de alterar o script), use:
+> **Atenção:** o `script.sql` só é executado quando o banco é criado pela primeira vez. Para recriar o banco do zero (por exemplo, depois de alterar o script), use, na raiz do projeto:
 > ```bash
-> docker compose down -v
-> docker compose up -d
+> docker compose --env-file database/.env down -v
+> docker compose --env-file database/.env up -d db
 > ```
 > O `-v` apaga todos os dados.
 
@@ -171,7 +170,7 @@ Não abra os arquivos HTML com dois cliques: pelo endereço `file://` o navegado
 
 | O quê | Endereço |
 |---|---|
-| Sistema (Dashboard) | http://localhost:5500/pages/dashboard.html |
+| Sistema (Dashboard) | http://localhost:5500 |
 | Contas | http://localhost:5500/pages/contas.html |
 | Categorias | http://localhost:5500/pages/categorias.html |
 | Transações | http://localhost:5500/pages/transacoes.html |
@@ -230,7 +229,9 @@ Exemplo de corpo para criar uma transação:
 
 ```
 controle-financeiro/
+├── docker-compose.yml        Sobe banco, back-end e front-end
 ├── backend/                  API REST em Spring Boot
+│   ├── Dockerfile            Imagem do back-end
 │   ├── pom.xml
 │   ├── mvnw / mvnw.cmd       Maven Wrapper
 │   └── src/main/
@@ -248,9 +249,9 @@ controle-financeiro/
 │           └── application.yaml
 ├── database/
 │   ├── script.sql            Criação das tabelas e dados de exemplo
-│   ├── docker-compose.yml    Container do MySQL
 │   └── .env.example          Modelo do arquivo com a senha do banco
 ├── frontend/
+│   ├── index.html            Redireciona para a Dashboard
 │   ├── css/                  Estilos (global.css e estilos por tela)
 │   ├── js/                   api.js, menu.js e um script por tela
 │   └── pages/                dashboard, contas, categorias e transações
@@ -267,5 +268,5 @@ controle-financeiro/
 | Back-end não conecta ao banco | Confira se o container está rodando (`docker ps`), se existe o arquivo `database/.env` e se o back-end foi iniciado de dentro da pasta `backend`. |
 | `permission denied` ao rodar `./mvnw` | Rode `chmod +x mvnw` dentro da pasta `backend`. |
 | Mudança no CSS ou JS não aparece | Recarregue a página ignorando o cache: **Cmd + Shift + R** (macOS) ou **Ctrl + Shift + R** (Windows/Linux). |
-| Alterei o `script.sql` e nada mudou | Recrie o banco com `docker compose down -v` e `docker compose up -d` dentro da pasta `database`. |
-| Porta 3306 já está em uso | Pare o MySQL instalado na máquina, ou outro container que esteja usando a porta, e suba o banco novamente. |
+| Alterei o `script.sql` e nada mudou | Recrie o banco com `docker compose --env-file database/.env down -v` e suba de novo (veja o passo 3). |
+| Porta 3306, 8080 ou 5500 já está em uso | Pare o programa ou container que está usando a porta (por exemplo, um MySQL instalado na máquina, ou o back-end rodando pelo `./mvnw` enquanto o modo Docker completo está ativo) e suba novamente. |
