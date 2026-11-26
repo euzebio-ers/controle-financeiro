@@ -563,3 +563,47 @@ button {
     width: 100%;
   }
 }
+
+/* ===================================================================
+   AJUSTES VISUAIS
+   =================================================================== */
+
+/* Menu lateral fixo ao rolar a página (só no computador;
+   no celular ele continua abrindo pelo botão ☰ Menu) */
+@media (min-width: 769px) {
+  .menu-lateral {
+    position: sticky;
+    top: 0;
+    height: 100vh;
+    overflow-y: auto;
+  }
+}
+
+/* Hover nas linhas atrasadas: vermelho um pouco mais forte
+   em vez do cinza claro das outras linhas */
+.tabela tbody tr.linha-atrasada:hover {
+  background-color: #fecaca;
+}
+
+/* Seta dos campos de seleção desenhada pelo CSS, com a mesma
+   distância da borda direita que o texto tem da borda esquerda */
+select {
+  -webkit-appearance: none;
+  appearance: none;
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='8' viewBox='0 0 12 8'%3E%3Cpath d='M1 1.5l5 5 5-5' fill='none' stroke='%236b7280' stroke-width='1.8' stroke-linecap='round' stroke-linejoin='round'/%3E%3C/svg%3E");
+  background-repeat: no-repeat;
+  background-size: 12px 8px;
+  background-position: right 12px center;
+  padding-right: 36px;
+  cursor: pointer;
+}
+
+.form-campo select {
+  padding-right: 36px;
+}
+
+#filtroTipo,
+#filtroStatus {
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='8' viewBox='0 0 12 8'%3E%3Cpath d='M1 1.5l5 5 5-5' fill='none' stroke='%23164b2c' stroke-width='1.8' stroke-linecap='round' stroke-linejoin='round'/%3E%3C/svg%3E");
+  background-position: right 14px center;
+}
