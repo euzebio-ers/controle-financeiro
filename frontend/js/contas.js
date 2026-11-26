@@ -79,7 +79,7 @@ function renderizarTabela(contas) {
     const linha = document.createElement("tr");
     linha.innerHTML = `
       <td>${conta.nome}</td>
-      <td><span class="selo selo-neutro">${rotuloTipo}</span></td>
+      <td><span class="selo selo-${conta.tipo.toLowerCase()}">${rotuloTipo}</span></td>
       <td class="${classeSaldo(conta.saldoInicial)}">${formatarMoeda(conta.saldoInicial)}</td>
       <td class="${classeSaldo(conta.saldoAtual)}">${formatarMoeda(conta.saldoAtual)}</td>
       <td class="tabela__acoes">
