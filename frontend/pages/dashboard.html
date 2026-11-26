@@ -1,0 +1,73 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Dashboard — Controle Financeiro</title>
+  <link rel="stylesheet" href="../css/global.css" />
+  <link rel="stylesheet" href="../css/dashboard.css" />
+</head>
+<body>
+
+  <div class="layout">
+    <div id="menu-lateral"></div>
+
+    <main class="conteudo">
+      <h1 class="pagina-titulo">Dashboard</h1>
+      <p class="dashboard-subtitulo" id="mesAtual"></p>
+
+      <div id="caixaMensagem" class="mensagem oculta" role="alert"></div>
+
+      <!-- Cards de resumo -->
+      <section class="cards-resumo" aria-label="Resumo financeiro">
+        <div class="card">
+          <div class="card__rotulo">Saldo total</div>
+          <div class="card__valor" id="cardSaldoTotal">—</div>
+        </div>
+
+        <div class="card">
+          <div class="card__rotulo">Receitas do mês</div>
+          <div class="card__valor valor-positivo" id="cardReceitas">—</div>
+        </div>
+
+        <div class="card">
+          <div class="card__rotulo">Despesas do mês</div>
+          <div class="card__valor valor-negativo" id="cardDespesas">—</div>
+        </div>
+      </section>
+
+      <!-- Transações atrasadas -->
+      <section aria-labelledby="tituloAtrasadas">
+        <div class="secao-cabecalho">
+          <h2 class="secao-titulo" id="tituloAtrasadas">Transações atrasadas</h2>
+          <a class="btn btn-secundario" href="transacoes.html">Ver todas as transações</a>
+        </div>
+
+        <div class="tabela-wrapper">
+          <table class="tabela">
+            <thead>
+              <tr>
+                <th>Descrição</th>
+                <th>Valor</th>
+                <th>Vencimento</th>
+                <th>Atraso</th>
+              </tr>
+            </thead>
+            <tbody id="corpoTabela">
+              <tr><td colspan="4">Carregando...</td></tr>
+            </tbody>
+          </table>
+          <div id="estadoVazio" class="estado-vazio" style="display: none;">
+            Nenhuma transação atrasada. Tudo em dia! 🎉
+          </div>
+        </div>
+      </section>
+    </main>
+  </div>
+
+  <script src="../js/api.js"></script>
+  <script src="../js/menu.js"></script>
+  <script>montarMenu("dashboard");</script>
+  <script src="../js/dashboard.js"></script>
+</body>
+</html>
