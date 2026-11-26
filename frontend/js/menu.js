@@ -1,17 +1,3 @@
-/* ===================================================================
-   MENU.JS — Controle Financeiro
-   Responsabilidade: Pessoa 3
-   Gera o menu lateral em todas as páginas (evita copiar/colar o HTML
-   do menu manualmente em cada arquivo). Cada página só precisa de:
-
-   <div id="menu-lateral"></div>
-   <script src="../js/menu.js"></script>
-   <script>montarMenu("categorias");</script>
-
-   O parâmetro de montarMenu() é o nome da página atual, usado para
-   destacar o link ativo.
-   =================================================================== */
-
 function montarMenu(paginaAtual) {
   const links = [
     { nome: "Dashboard", pagina: "dashboard", href: "dashboard.html" },

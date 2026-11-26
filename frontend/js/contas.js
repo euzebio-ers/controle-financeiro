@@ -1,16 +1,3 @@
-/* ===================================================================
-   CONTAS.JS — Controle Financeiro
-   Responsabilidade: Pessoa 3
-
-   Depende de api.js (window.api) já carregado antes deste arquivo.
-   Segue o contrato:
-     GET    /api/contas?busca=texto&tipo=CORRENTE
-     POST   /api/contas        body: { nome, tipo, saldoInicial }
-     PUT    /api/contas/{id}   body: { nome, tipo, saldoInicial }
-     DELETE /api/contas/{id}
-   =================================================================== */
-
-// ---- Referências dos elementos da página ----
 const corpoTabela = document.getElementById("corpoTabela");
 const estadoVazio = document.getElementById("estadoVazio");
 const campoBusca = document.getElementById("campoBusca");
@@ -36,9 +23,6 @@ const ROTULOS_TIPO = {
   CARTEIRA: "Carteira",
 };
 
-// ---------------------------------------------------------------
-// FORMATAÇÃO
-// ---------------------------------------------------------------
 function formatarMoeda(valor) {
   return Number(valor).toLocaleString("pt-BR", {
     style: "currency",
@@ -50,9 +34,6 @@ function classeSaldo(valor) {
   return Number(valor) < 0 ? "valor-negativo" : "valor-positivo";
 }
 
-// ---------------------------------------------------------------
-// MENSAGENS
-// ---------------------------------------------------------------
 function mostrarMensagem(texto, tipo) {
   caixaMensagem.textContent = texto;
   caixaMensagem.className = "mensagem " + (tipo === "erro" ? "mensagem-erro" : "mensagem-sucesso");
@@ -63,9 +44,6 @@ function mostrarMensagem(texto, tipo) {
   }, 4000);
 }
 
-// ---------------------------------------------------------------
-// LISTAGEM
-// ---------------------------------------------------------------
 async function carregarContas() {
   const busca = campoBusca.value.trim();
 
@@ -113,18 +91,11 @@ function renderizarTabela(contas) {
   });
 }
 
-// ---------------------------------------------------------------
-// BUSCA (com debounce) E FILTRO
-// ---------------------------------------------------------------
 campoBusca.addEventListener("input", () => {
   clearTimeout(temporizadorBusca);
   temporizadorBusca = setTimeout(carregarContas, 400);
 });
 
-
-// ---------------------------------------------------------------
-// MODAL: abrir / fechar
-// ---------------------------------------------------------------
 function abrirModalCriacao() {
   modalTitulo.textContent = "Nova conta";
   contaIdInput.value = "";
@@ -157,9 +128,6 @@ modalFundo.addEventListener("click", (evento) => {
   if (evento.target === modalFundo) fecharModal();
 });
 
-// ---------------------------------------------------------------
-// VALIDAÇÃO DO FORMULÁRIO (front)
-// ---------------------------------------------------------------
 function limparErrosFormulario() {
   document.getElementById("campoNomeWrapper").classList.remove("erro");
   document.getElementById("campoTipoWrapper").classList.remove("erro");
@@ -194,9 +162,6 @@ function validarFormulario() {
   return valido;
 }
 
-// ---------------------------------------------------------------
-// SALVAR (criar ou editar)
-// ---------------------------------------------------------------
 formConta.addEventListener("submit", async (evento) => {
   evento.preventDefault();
 
@@ -224,9 +189,6 @@ formConta.addEventListener("submit", async (evento) => {
   }
 });
 
-// ---------------------------------------------------------------
-// EXCLUIR
-// ---------------------------------------------------------------
 async function excluirConta(id) {
   const confirmar = confirm("Tem certeza que deseja excluir esta conta?");
   if (!confirmar) return;
@@ -242,7 +204,4 @@ async function excluirConta(id) {
   }
 }
 
-// ---------------------------------------------------------------
-// INICIALIZAÇÃO
-// ---------------------------------------------------------------
 carregarContas();

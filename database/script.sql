@@ -1,5 +1,3 @@
--- Controle Financeiro - Script do banco (MySQL 8)
--- Pode ser executado do zero: apaga e recria o banco.
 SET NAMES utf8mb4;
 
 DROP DATABASE IF EXISTS controle_financeiro;
@@ -8,7 +6,6 @@ CREATE DATABASE controle_financeiro
   COLLATE utf8mb4_unicode_ci;
 USE controle_financeiro;
 
--- Tabelas
 CREATE TABLE contas (
   id            BIGINT        NOT NULL AUTO_INCREMENT,
   nome          VARCHAR(100)  NOT NULL,
@@ -42,7 +39,6 @@ CREATE TABLE transacoes (
   CONSTRAINT ck_transacoes_valor  CHECK (valor > 0),
   CONSTRAINT ck_transacoes_tipo   CHECK (tipo IN ('RECEITA', 'DESPESA')),
   CONSTRAINT ck_transacoes_status CHECK (status IN ('PENDENTE', 'PAGA')),
-  -- RESTRICT: o banco também impede excluir conta/categoria com transações
   CONSTRAINT fk_transacoes_conta FOREIGN KEY (conta_id)
     REFERENCES contas (id) ON DELETE RESTRICT ON UPDATE CASCADE,
   CONSTRAINT fk_transacoes_categoria FOREIGN KEY (categoria_id)
@@ -53,51 +49,93 @@ CREATE INDEX idx_transacoes_conta      ON transacoes (conta_id);
 CREATE INDEX idx_transacoes_categoria  ON transacoes (categoria_id);
 CREATE INDEX idx_transacoes_vencimento ON transacoes (vencimento);
 
--- ---------------------------------------------------------
--- Dados de exemplo
--- Datas relativas a hoje, para sempre existirem transações
--- do mês atual, pendentes futuras e atrasadas.
--- ---------------------------------------------------------
+SET @hoje         = CURDATE();
+SET @inicio_mes   = DATE_FORMAT(CURDATE(), '%Y-%m-01');
+SET @mes_passado  = DATE_SUB(@inicio_mes, INTERVAL 1 MONTH);
+SET @proximo_mes  = DATE_ADD(@inicio_mes, INTERVAL 1 MONTH);
 
-SET @hoje        = CURDATE();
-SET @inicio_mes  = DATE_FORMAT(CURDATE(), '%Y-%m-01');
-SET @mes_passado = DATE_SUB(DATE_FORMAT(CURDATE(), '%Y-%m-01'), INTERVAL 1 MONTH);
+SET @mp_dia05 = DATE_ADD(@mes_passado, INTERVAL 4 DAY);
+SET @mp_dia08 = DATE_ADD(@mes_passado, INTERVAL 7 DAY);
+SET @mp_dia10 = DATE_ADD(@mes_passado, INTERVAL 9 DAY);
+SET @mp_dia12 = DATE_ADD(@mes_passado, INTERVAL 11 DAY);
+SET @mp_dia15 = DATE_ADD(@mes_passado, INTERVAL 14 DAY);
+SET @mp_dia18 = DATE_ADD(@mes_passado, INTERVAL 17 DAY);
+SET @mp_dia20 = DATE_ADD(@mes_passado, INTERVAL 19 DAY);
+SET @mp_dia25 = DATE_ADD(@mes_passado, INTERVAL 24 DAY);
+
+SET @dia01 = @inicio_mes;
+SET @dia05 = LEAST(CAST(DATE_ADD(@inicio_mes, INTERVAL 4 DAY) AS DATE), CAST(@hoje AS DATE));
+SET @dia08 = LEAST(CAST(DATE_ADD(@inicio_mes, INTERVAL 7 DAY) AS DATE), CAST(@hoje AS DATE));
+SET @dia10 = LEAST(CAST(DATE_ADD(@inicio_mes, INTERVAL 9 DAY) AS DATE), CAST(@hoje AS DATE));
+SET @dia12 = LEAST(CAST(DATE_ADD(@inicio_mes, INTERVAL 11 DAY) AS DATE), CAST(@hoje AS DATE));
+
+SET @pm_dia05 = DATE_ADD(@proximo_mes, INTERVAL 4 DAY);
 
 INSERT INTO contas (nome, tipo, saldo_inicial) VALUES
-  ('Nubank',         'CORRENTE', 500.00),   -- id 1
-  ('Poupança Caixa', 'POUPANCA', 1000.00),  -- id 2
-  ('Carteira',       'CARTEIRA', 100.00);   -- id 3
+  ('Banco Master',         'CORRENTE', 1200.00),
+  ('Banco do Brasil', 'CORRENTE', 350.00),
+  ('Poupança Itaú', 'POUPANCA', 2500.00),
+  ('Carteira',       'CARTEIRA', 200.00);
 
 INSERT INTO categorias (nome, tipo) VALUES
-  ('Salário',      'RECEITA'),  -- id 1
-  ('Freelance',    'RECEITA'),  -- id 2
-  ('Rendimentos',  'RECEITA'),  -- id 3
-  ('Moradia',      'DESPESA'),  -- id 4
-  ('Alimentação',  'DESPESA'),  -- id 5
-  ('Transporte',   'DESPESA');  -- id 6
+  ('Salário',           'RECEITA'),
+  ('Freelance',         'RECEITA'),
+  ('Rendimentos',       'RECEITA'),
+  ('Outras Receitas',   'RECEITA'),
+  ('Moradia',           'DESPESA'),
+  ('Contas da Casa',    'DESPESA'),
+  ('Alimentação',       'DESPESA'),
+  ('Delivery',          'DESPESA'),
+  ('Transporte',        'DESPESA'),
+  ('Saúde e Bem-estar', 'DESPESA'),
+  ('Cuidados Pessoais', 'DESPESA'),
+  ('Assinaturas',       'DESPESA'),
+  ('Cartão de Crédito', 'DESPESA'),
+  ('Lazer',             'DESPESA'),
+  ('Educação',          'DESPESA');
 
 INSERT INTO transacoes
   (descricao, valor, vencimento, tipo, status, data_pagamento, conta_id, categoria_id)
 VALUES
-  -- Pagas no mês atual
-  ('Salário',              3500.00, @inicio_mes, 'RECEITA', 'PAGA', @inicio_mes, 1, 1),
-  ('Aluguel',              1200.00, @inicio_mes, 'DESPESA', 'PAGA', @inicio_mes, 1, 4),
-  ('Mercado do mês',        450.80, @inicio_mes, 'DESPESA', 'PAGA', @inicio_mes, 1, 5),
-  ('Rendimento poupança',    12.35, @inicio_mes, 'RECEITA', 'PAGA', @inicio_mes, 2, 3),
+  ('Salário',                3500.00, @mp_dia05, 'RECEITA', 'PAGA', @mp_dia05, 1,  1),
+  ('Aluguel',                1200.00, @mp_dia05, 'DESPESA', 'PAGA', @mp_dia05, 1,  5),
+  ('Academia',                 99.90, @mp_dia05, 'DESPESA', 'PAGA', @mp_dia05, 1, 10),
+  ('Supermercado',            612.35, @mp_dia08, 'DESPESA', 'PAGA', @mp_dia08, 1,  7),
+  ('Condomínio',              350.00, @mp_dia10, 'DESPESA', 'PAGA', @mp_dia10, 1,  5),
+  ('Conta de Luz',            165.40, @mp_dia10, 'DESPESA', 'PAGA', @mp_dia10, 1,  6),
+  ('Fatura do Cartão',        842.37, @mp_dia10, 'DESPESA', 'PAGA', @mp_dia10, 1, 13),
+  ('iFood',                    58.70, @mp_dia12, 'DESPESA', 'PAGA', @mp_dia12, 1,  8),
+  ('Conta de Água',            78.90, @mp_dia15, 'DESPESA', 'PAGA', @mp_dia15, 1,  6),
+  ('Internet',                 99.90, @mp_dia15, 'DESPESA', 'PAGA', @mp_dia15, 1,  6),
+  ('Netflix',                  44.90, @mp_dia15, 'DESPESA', 'PAGA', @mp_dia15, 1, 12),
+  ('Barbearia',                45.00, @mp_dia18, 'DESPESA', 'PAGA', @mp_dia18, 4, 11),
+  ('YouTube Premium',          24.90, @mp_dia20, 'DESPESA', 'PAGA', @mp_dia20, 1, 12),
+  ('Uber',                     27.50, @mp_dia20, 'DESPESA', 'PAGA', @mp_dia20, 1,  9),
+  ('Freelance - Site institucional', 900.00, @mp_dia25, 'RECEITA', 'PAGA', @mp_dia25, 2, 2),
+  ('Rendimento da poupança',   11.80, @mp_dia25, 'RECEITA', 'PAGA', @mp_dia25, 3,  3),
 
-  -- Pagas no mês passado
-  ('Salário',              3500.00, @mes_passado, 'RECEITA', 'PAGA', @mes_passado, 1, 1),
-  ('Aluguel',              1200.00, @mes_passado, 'DESPESA', 'PAGA', @mes_passado, 1, 4),
-  ('Freelance site',        800.00, @mes_passado, 'RECEITA', 'PAGA', @mes_passado, 3, 2),
-  ('Uber',                   38.90, @mes_passado, 'DESPESA', 'PAGA', @mes_passado, 3, 6),
+  ('Rendimento da poupança',   12.35, @dia01, 'RECEITA', 'PAGA', @dia01, 3,  3),
+  ('Salário',                3500.00, @dia05, 'RECEITA', 'PAGA', @dia05, 1,  1),
+  ('Aluguel',                1200.00, @dia05, 'DESPESA', 'PAGA', @dia05, 1,  5),
+  ('Academia',                 99.90, @dia05, 'DESPESA', 'PAGA', @dia05, 1, 10),
+  ('Supermercado',            587.20, @dia08, 'DESPESA', 'PAGA', @dia08, 1,  7),
+  ('Combustível',             150.00, @dia08, 'DESPESA', 'PAGA', @dia08, 2,  9),
+  ('Fatura do Cartão',        915.62, @dia10, 'DESPESA', 'PAGA', @dia10, 1, 13),
+  ('iFood',                    64.30, @dia10, 'DESPESA', 'PAGA', @dia10, 1,  8),
+  ('Venda de fone usado',     120.00, @dia10, 'RECEITA', 'PAGA', @dia10, 4,  4),
+  ('Barbearia',                45.00, @dia12, 'DESPESA', 'PAGA', @dia12, 4, 11),
+  ('Spotify',                  21.90, @dia12, 'DESPESA', 'PAGA', @dia12, 1, 12),
+  ('Farmácia',                 37.80, @dia12, 'DESPESA', 'PAGA', @dia12, 4, 10),
 
-  -- Pendentes com vencimento passado (API devolve como ATRASADA)
-  ('Conta de luz',          189.90, DATE_SUB(@hoje, INTERVAL 10 DAY), 'DESPESA', 'PENDENTE', NULL, 1, 4),
-  ('Internet',               99.90, DATE_SUB(@hoje, INTERVAL 5 DAY),  'DESPESA', 'PENDENTE', NULL, 1, 4),
-  ('Freelance logo',        350.00, DATE_SUB(@hoje, INTERVAL 3 DAY),  'RECEITA', 'PENDENTE', NULL, 1, 2),
-  ('Combustível',           150.00, DATE_SUB(@hoje, INTERVAL 1 DAY),  'DESPESA', 'PENDENTE', NULL, 3, 6),
+  ('Conta de Luz',            182.75, DATE_SUB(@hoje, INTERVAL 6 DAY), 'DESPESA', 'PENDENTE', NULL, 1,  6),
+  ('Freelance - Logo para cliente', 350.00, DATE_SUB(@hoje, INTERVAL 4 DAY), 'RECEITA', 'PENDENTE', NULL, 2, 2),
+  ('Conta de Água',            81.40, DATE_SUB(@hoje, INTERVAL 3 DAY), 'DESPESA', 'PENDENTE', NULL, 1,  6),
+  ('Internet',                 99.90, DATE_SUB(@hoje, INTERVAL 1 DAY), 'DESPESA', 'PENDENTE', NULL, 1,  6),
 
-  -- Pendentes no prazo
-  ('Feira',                 120.00, DATE_ADD(@hoje, INTERVAL 2 DAY),  'DESPESA', 'PENDENTE', NULL, 3, 5),
-  ('Condomínio',            420.00, DATE_ADD(@hoje, INTERVAL 5 DAY),  'DESPESA', 'PENDENTE', NULL, 1, 4),
-  ('Salário',              3500.00, DATE_ADD(@hoje, INTERVAL 20 DAY), 'RECEITA', 'PENDENTE', NULL, 1, 1);
+  ('Netflix',                  44.90, DATE_ADD(@hoje, INTERVAL 2 DAY),  'DESPESA', 'PENDENTE', NULL, 1, 12),
+  ('Cinema',                   64.00, DATE_ADD(@hoje, INTERVAL 3 DAY),  'DESPESA', 'PENDENTE', NULL, 4, 14),
+  ('YouTube Premium',          24.90, DATE_ADD(@hoje, INTERVAL 4 DAY),  'DESPESA', 'PENDENTE', NULL, 1, 12),
+  ('Condomínio',              350.00, DATE_ADD(@hoje, INTERVAL 5 DAY),  'DESPESA', 'PENDENTE', NULL, 1,  5),
+  ('Curso de Inglês',         189.00, DATE_ADD(@hoje, INTERVAL 7 DAY),  'DESPESA', 'PENDENTE', NULL, 1, 15),
+  ('Salário',                3500.00, @pm_dia05, 'RECEITA', 'PENDENTE', NULL, 1,  1),
+  ('Aluguel',                1200.00, @pm_dia05, 'DESPESA', 'PENDENTE', NULL, 1,  5);

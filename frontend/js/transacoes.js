@@ -36,9 +36,6 @@ const ROTULOS = {
   ATRASADA: "Atrasada"
 };
 
-// --------------------------------------------------
-// UTILIDADES
-// --------------------------------------------------
 
 function escaparHTML(valor) {
   return String(valor ?? "").replace(/[&<>"']/g, caractere => ({
@@ -78,10 +75,6 @@ function mostrarMensagem(texto, tipo = "sucesso") {
   }, 4000);
 }
 
-// --------------------------------------------------
-// CARREGAR TRANSAÇÕES E FILTROS
-// --------------------------------------------------
-
 async function carregarTransacoes() {
   const parametros = new URLSearchParams();
 
@@ -112,10 +105,6 @@ async function carregarTransacoes() {
     mostrarMensagem(erro.message, "erro");
   }
 }
-
-// --------------------------------------------------
-// RENDERIZAR TABELA
-// --------------------------------------------------
 
 function renderizarTabela(transacoes) {
   corpoTabela.innerHTML = "";
@@ -161,7 +150,7 @@ function renderizarTabela(transacoes) {
       <td>${formatarData(transacao.vencimento)}</td>
 
       <td>
-        <span class="selo selo-neutro">
+        <span class="selo ${tipo === "RECEITA" ? "selo-receita" : "selo-despesa"}">
           ${ROTULOS[tipo] || escaparHTML(tipo)}
         </span>
       </td>
@@ -210,16 +199,11 @@ function renderizarTabela(transacoes) {
     corpoTabela.appendChild(linha);
   });
 }
-
-// --------------------------------------------------
-// CARREGAR CONTAS E CATEGORIAS
-// --------------------------------------------------
-
 async function carregarContas() {
   contasDisponiveis = await api.get("/contas");
 
   campoConta.innerHTML =
-    '<option value="">Selecione uma conta</option>';
+    '<option value="" disabled selected hidden>Selecione uma conta</option>';
 
   contasDisponiveis.forEach(conta => {
     campoConta.innerHTML += `
@@ -244,7 +228,7 @@ function atualizarSelectCategorias() {
   const tipo = campoTipo.value;
 
   campoCategoria.innerHTML =
-    '<option value="">Selecione uma categoria</option>';
+    '<option value="" disabled selected hidden>Selecione uma categoria</option>';
 
   const filtradas = categoriasDisponiveis.filter(categoria =>
     categoria.tipo === tipo
@@ -258,11 +242,6 @@ function atualizarSelectCategorias() {
     `;
   });
 }
-
-// --------------------------------------------------
-// MODAL: CRIAR E EDITAR
-// --------------------------------------------------
-
 async function abrirModalCriacao() {
   formTransacao.reset();
   transacaoId.value = "";
@@ -299,7 +278,6 @@ async function abrirModalEdicao(id) {
     campoVencimento.value = transacao.vencimento;
     campoTipo.value = transacao.tipo;
 
-    // Atualiza as categorias conforme o tipo
     await carregarCategorias(transacao.tipo);
 
     campoConta.value = transacao.contaId;
@@ -328,10 +306,6 @@ modalFundo.addEventListener("click", evento => {
   }
 });
 
-// --------------------------------------------------
-// EVENTOS DOS FILTROS
-// --------------------------------------------------
-
 campoBusca.addEventListener("input", () => {
   clearTimeout(temporizadorBusca);
 
@@ -351,10 +325,6 @@ botaoLimparFiltros.addEventListener("click", () => {
   carregarTransacoes();
 });
 
-// --------------------------------------------------
-// CATEGORIA DINÂMICA CONFORME O TIPO
-// --------------------------------------------------
-
 campoTipo.addEventListener("change", async () => {
   try {
     await carregarCategorias(campoTipo.value);
@@ -362,10 +332,6 @@ campoTipo.addEventListener("change", async () => {
     mostrarMensagem(erro.message, "erro");
   }
 });
-
-// --------------------------------------------------
-// VALIDAÇÃO DO FORMULÁRIO
-// --------------------------------------------------
 
 const CAMPOS_ERRO = [
   ["campoDescricaoWrapper", "erroDescricao"],
@@ -450,10 +416,6 @@ function validarFormulario() {
   return valido;
 }
 
-// --------------------------------------------------
-// SALVAR: CRIAR OU EDITAR
-// --------------------------------------------------
-
 formTransacao.addEventListener("submit", async evento => {
   evento.preventDefault();
 
@@ -495,10 +457,6 @@ formTransacao.addEventListener("submit", async evento => {
   }
 });
 
-// --------------------------------------------------
-// EXCLUIR TRANSAÇÃO
-// --------------------------------------------------
-
 async function excluirTransacao(id) {
   const confirmar = confirm(
     "Tem certeza que deseja excluir esta transação?"
@@ -520,10 +478,6 @@ async function excluirTransacao(id) {
     mostrarMensagem(erro.message, "erro");
   }
 }
-
-// --------------------------------------------------
-// MARCAR COMO PAGA
-// --------------------------------------------------
 
 async function marcarComoPaga(id) {
   const confirmar = confirm(
