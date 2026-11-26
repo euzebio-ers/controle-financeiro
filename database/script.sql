@@ -1,5 +1,3 @@
--- Controle Financeiro - Script do banco (MySQL 8)
--- Pode ser executado do zero: apaga e recria o banco.
 SET NAMES utf8mb4;
 
 DROP DATABASE IF EXISTS controle_financeiro;
@@ -64,17 +62,19 @@ SET @inicio_mes  = DATE_FORMAT(CURDATE(), '%Y-%m-01');
 SET @mes_passado = DATE_SUB(DATE_FORMAT(CURDATE(), '%Y-%m-01'), INTERVAL 1 MONTH);
 
 INSERT INTO contas (nome, tipo, saldo_inicial) VALUES
-  ('Nubank',         'CORRENTE', 500.00),   -- id 1
-  ('Poupança Caixa', 'POUPANCA', 1000.00),  -- id 2
-  ('Carteira',       'CARTEIRA', 100.00);   -- id 3
+  ('Banco Master',         'CORRENTE', 500.00),   -- id 1
+  ('Poupança',             'POUPANCA', 1000.00),  -- id 2
+  ('Carteira',             'CARTEIRA', 100.00);   -- id 3
 
 INSERT INTO categorias (nome, tipo) VALUES
   ('Salário',      'RECEITA'),  -- id 1
-  ('Freelance',    'RECEITA'),  -- id 2
+  ('Freelancer',   'RECEITA'),  -- id 2
   ('Rendimentos',  'RECEITA'),  -- id 3
-  ('Moradia',      'DESPESA'),  -- id 4
+  ('Aluguel',      'DESPESA'),  -- id 4
   ('Alimentação',  'DESPESA'),  -- id 5
   ('Transporte',   'DESPESA');  -- id 6
+  ('Academia',                'DESPESA');  -- id 7
+
 
 INSERT INTO transacoes
   (descricao, valor, vencimento, tipo, status, data_pagamento, conta_id, categoria_id)
@@ -82,7 +82,7 @@ VALUES
   -- Pagas no mês atual
   ('Salário',              3500.00, @inicio_mes, 'RECEITA', 'PAGA', @inicio_mes, 1, 1),
   ('Aluguel',              1200.00, @inicio_mes, 'DESPESA', 'PAGA', @inicio_mes, 1, 4),
-  ('Mercado do mês',        450.80, @inicio_mes, 'DESPESA', 'PAGA', @inicio_mes, 1, 5),
+  ('Mercado do mês',        850.80, @inicio_mes, 'DESPESA', 'PAGA', @inicio_mes, 1, 5),
   ('Rendimento poupança',    12.35, @inicio_mes, 'RECEITA', 'PAGA', @inicio_mes, 2, 3),
 
   -- Pagas no mês passado
@@ -94,7 +94,7 @@ VALUES
   -- Pendentes com vencimento passado (API devolve como ATRASADA)
   ('Conta de luz',          189.90, DATE_SUB(@hoje, INTERVAL 10 DAY), 'DESPESA', 'PENDENTE', NULL, 1, 4),
   ('Internet',               99.90, DATE_SUB(@hoje, INTERVAL 5 DAY),  'DESPESA', 'PENDENTE', NULL, 1, 4),
-  ('Freelance logo',        350.00, DATE_SUB(@hoje, INTERVAL 3 DAY),  'RECEITA', 'PENDENTE', NULL, 1, 2),
+  ('Freelance',              350.00, DATE_SUB(@hoje, INTERVAL 3 DAY),  'RECEITA', 'PENDENTE', NULL, 1, 2),
   ('Combustível',           150.00, DATE_SUB(@hoje, INTERVAL 1 DAY),  'DESPESA', 'PENDENTE', NULL, 3, 6),
 
   -- Pendentes no prazo
