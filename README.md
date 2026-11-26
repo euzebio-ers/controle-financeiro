@@ -2,7 +2,7 @@
 
 Sistema web de controle financeiro pessoal. Permite cadastrar contas, categorias e transações (receitas e despesas), acompanhar o saldo de cada conta e identificar o que está pago, pendente ou atrasado.
 
-🎥 **Vídeo de demonstração:** _adicionar o link aqui_
+🎥 [**Vídeo de demonstração**](https://youtu.be/LcWFV-73CZE)
 
 ---
 
