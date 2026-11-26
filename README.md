@@ -50,6 +50,37 @@ Não é necessário instalar o Maven nem o Node.js.
 
 ---
 
+## Executar tudo com Docker (um comando)
+
+Forma mais rápida de rodar o projeto: sobe o banco, o back-end e o front-end juntos. Só precisa do **Git** e do **Docker Desktop** (não é necessário ter Java nem Python).
+
+1. Crie o arquivo com a senha do banco e defina uma senha nele (detalhes no passo 2 de [Como executar](#como-executar)):
+
+   ```bash
+   cp database/.env.example database/.env
+   ```
+
+2. Na raiz do projeto, rode:
+
+   ```bash
+   docker compose --env-file database/.env up -d --build
+   ```
+
+3. Acesse **http://localhost:5500**.
+
+Na primeira vez o Docker baixa as imagens e compila o back-end, o que pode levar alguns minutos. O back-end só inicia depois que o banco está pronto.
+
+| Ação | Comando (na raiz do projeto) |
+|---|---|
+| Ver os logs do back-end | `docker compose --env-file database/.env logs -f backend` |
+| Parar tudo | `docker compose --env-file database/.env down` |
+| Parar e apagar os dados do banco | `docker compose --env-file database/.env down -v` |
+| Recompilar depois de alterar o back-end | `docker compose --env-file database/.env up -d --build` |
+
+> Alterações no front-end aparecem direto (basta recarregar a página). Não rode este modo junto com o banco da pasta `database`, porque os dois usam a porta 3306.
+
+---
+
 ## Como executar
 
 São três partes rodando ao mesmo tempo: **banco**, **back-end** e **front-end**, nessa ordem. Use um terminal para cada uma.
